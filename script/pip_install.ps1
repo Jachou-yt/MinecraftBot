@@ -1,0 +1,1 @@
+pip install discord python-aternos python-dotenv

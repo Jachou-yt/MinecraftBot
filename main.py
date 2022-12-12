@@ -29,18 +29,13 @@ async def on_ready():
 @bot.tree.command(name="help", description="Affiche un message d'aide pour utiliser le bot")
 async def help(interaction: discord.Interaction):
     await interaction.response.send_message(
-        f"Liste des commandes disponible {interaction.user.mention} : \n`/serveur`\n`/aternos`\n`/statuts`")
+        f"Liste des commandes disponible {interaction.user.mention} : \n`/help` \n**`/aternos`** : `aternos-start, aternos-stop`\n`/statuts`")
 
 
-@bot.group(name="aternos")
-async def aternos(interaction: discord.Interaction):
-    await interaction.response.send_message("test")
-
-
-@bot.tree.command(name="aternos-start", description="Permet de gérer votre serveur aternos")
+@bot.tree.command(name="aternos-start", description="Permet de démarrer votre serveur aternos")
 @app_commands.describe(username="username", password="password", server_id="server_id")
 async def aternos_start(interaction: discord.Interaction, username: str, password: str, server_id: str):
-    print("🔀 Aternos Start...")
+    print(f"🔀 Aternos Start by {interaction.user.name}")
     try:
         aternosAPI.start(username, password, int(server_id))
     except Exception as e:
@@ -50,13 +45,25 @@ async def aternos_start(interaction: discord.Interaction, username: str, passwor
     await interaction.response.send_message(f"✔️ Le serveur est lancé {interaction.user.mention} !")
 
 
+@bot.tree.command(name="aternos-stop", description="Permet de stoper votre serveur minecraft")
+@app_commands.describe(username="username", password="password", server_id="server_id")
+async def aternos_stop(interaction: discord.Interaction, username: str, password: str, server_id: str):
+    print(f"🔀 Aternos Stop by {interaction.user.name}")
+    try:
+        aternosAPI.stop(username, password, server_id)
+    except Exception as e:
+        await interaction.response.send_message(f"L'identifiant, le mot de passe ou l'id du serveur n'est pas le bon {interaction.user.mention}. \n `{e}`")
+    print(f"✔️ Serveur stopé par {interaction.user.name} !")
+
+
 @bot.tree.command(name="statuts", description="Permet de voir si un serveur est ouvert avec une ip")
 @app_commands.describe(ip="Ip de votre serveur", port="Port de votre serveur")
 async def status(interaction: discord.Interaction, ip: str, port: str):
-    print("🔀 Serveur Statuts...")
+    print(f"🔀 Serveur Statuts by {interaction.user.name}")
     x = minecraftAPI.statuts(ip, int(port))
     await interaction.response.send_message(f"Le serveur dont l'ip est `{ip}`, est `{x}`  {interaction.user.mention}.")
 
     print("✔️ Serveur Statuts a marché sans erreur.")
+
 
 bot.run(token)
