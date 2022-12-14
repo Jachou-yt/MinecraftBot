@@ -1,0 +1,1 @@
+C:\Users\matis\PycharmProjects\MinecraftBot\venv\Scripts\python.exe C:\Users\matis\PycharmProjects\MinecraftBot\main.py 
